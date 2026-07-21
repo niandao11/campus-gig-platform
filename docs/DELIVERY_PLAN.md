@@ -13,8 +13,8 @@
 | G2 状态数据安全 | 已完成 | [证据索引](EVIDENCE_INDEX.md#g2状态数据与安全) |
 | G3 工程与云连通 | 外部托管可达性阻塞 | 工程、Preview、Supabase与安全已校准；大陆直连风险依据D-020移至G7 |
 | G4 最小纵向切片 | 已完成（D-020例外） | [云端报名与确认闭环证据](evidence/G4_VERIFICATION.md)；仅feat分支，不合并main |
-| G5 完整生命周期 | 待开始 | 完工、待结算、模拟结算闭环 |
-| G6 异常与质量 | 待开始 | QA矩阵、移动/PC截图、回归结果 |
+| G5 完整生命周期 | 已完成（D-020例外） | [完整生命周期证据](evidence/G5_VERIFICATION.md)；三方均无条件同意；仅feat分支，不合并main |
+| G6 异常与质量 | 进行中 | 当前分支 `feat/g6-quality`；取消、拒绝、异常反馈与多视口回归 |
 | G7 发布 UAT | 待开始 | Production URL、实网和无痕验收 |
 
 ## G0：治理基线

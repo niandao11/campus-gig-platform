@@ -3,10 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import { ApplicationTimeline } from "../components/ApplicationTimeline";
 import { PageFeedback } from "../components/PageFeedback";
 import { ApplicationBadge } from "../components/StatusBadge";
-import { formatCurrency, isValidActualMinutes } from "../domain/calculations";
+import { formatCurrency, isValidActualMinutes, isValidRejectionReason } from "../domain/calculations";
 import { formatShift } from "../domain/formatters";
 import { useAsyncData } from "../hooks/useAsyncData";
-import { approveApplication, finishApplication, getEmployerDashboard } from "../services/demoService";
+import { approveApplication, finishApplication, getEmployerDashboard, rejectApplication } from "../services/demoService";
 
 export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: number }) {
   const { applicationId } = useParams();
@@ -15,6 +15,8 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
   const [actualMinutesInput, setActualMinutesInput] = useState("");
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+  const [showReject, setShowReject] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
 
   if (loading && !data) return <PageFeedback title="正在读取报名详情" detail="正在从招聘方受控视角读取同一条报名。" />;
   if (error && !data) return <PageFeedback tone="error" title="报名详情读取失败" detail={error} actionLabel="重新读取" onAction={() => void reload()} />;
@@ -61,6 +63,27 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
     }
   }
 
+  async function handleReject() {
+    const reason = rejectReason.trim();
+    if (!isValidRejectionReason(reason)) {
+      setActionError("请填写 1–500 字的拒绝原因。");
+      return;
+    }
+    setSubmitting(true);
+    setActionError(null);
+    setActionSuccess(null);
+    try {
+      const result = await rejectApplication(currentApplicationId, reason);
+      setActionSuccess(result.repeated ? "该报名此前已拒绝，已读取当前真实状态。" : "报名已拒绝，原因和名额变化已写入云端事件。");
+      setShowReject(false);
+      await reload();
+    } catch (mutationError) {
+      setActionError(mutationError instanceof Error ? mutationError.message : "拒绝报名失败，请重试");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <section className="page-stack detail-page">
       <Link className="back-link" to="/employer/applications">← 返回报名列表</Link>
@@ -98,8 +121,11 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
           {application.status === "pending" ? (
             <>
               <h2>确认学生报名</h2>
-              <p>确认后状态进入“报名已确认”，招聘方确认不会再次扣减名额。</p>
-              <button className="primary-button wide-button" type="button" disabled={submitting} onClick={() => void handleApprove()}>{submitting ? "正在确认…" : "确认报名"}</button>
+              <p>确认后状态进入“报名已确认”；如不符合要求，应填写原因并拒绝，名额只释放一次。</p>
+              <div className="action-buttons">
+                <button className="primary-button" type="button" disabled={submitting} onClick={() => void handleApprove()}>{submitting ? "正在确认…" : "确认报名"}</button>
+                <button className="secondary-button" type="button" disabled={submitting} onClick={() => { setActionError(null); setShowReject(true); }}>拒绝报名</button>
+              </div>
               <small>通过 decide_application 校验会话归属、当前状态与幂等。</small>
             </>
           ) : null}
@@ -132,7 +158,11 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
             </>
           ) : null}
           {application.status === "rejected" || application.status === "cancelled" ? (
-            <><h2>当前记录已终止</h2><p>该状态只读，不能继续完工或结算。</p></>
+            <>
+              <h2>当前记录已终止</h2>
+              <p>{application.status === "rejected" ? `报名未通过：${application.events.find((event) => event.toStatus === "rejected")?.note ?? "招聘方未通过该报名。"}` : "报名已取消，当前记录只读。"}</p>
+              <Link className="secondary-button wide-button" to="/employer/applications">返回报名处理</Link>
+            </>
           ) : null}
         </article>
       </section>
@@ -144,6 +174,23 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
         </div>
         <ApplicationTimeline events={application.events} />
       </section>
+      {showReject && application.status === "pending" ? (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => !submitting && setShowReject(false)}>
+          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="reject-title" onMouseDown={(event) => event.stopPropagation()}>
+            <span className="section-kicker">招聘方拒绝报名</span>
+            <h2 id="reject-title">填写未通过原因</h2>
+            <p>原因会写入报名事件并展示给学生；不能为空，最多 500 字。</p>
+            <label className="field-label" htmlFor="reject-reason">拒绝原因</label>
+            <textarea id="reject-reason" maxLength={500} rows={5} value={rejectReason} placeholder="例如：该班次已调整为需要夜间作业经验" onChange={(event) => { setRejectReason(event.target.value); setActionError(null); }} />
+            <div className="textarea-meta">{rejectReason.trim().length}/500 字</div>
+            {actionError ? <p className="inline-error" role="alert">{actionError} 当前状态未被伪造，可继续修改原因后重试。</p> : null}
+            <div className="modal-actions">
+              <button className="secondary-button" type="button" disabled={submitting} onClick={() => setShowReject(false)}>返回修改</button>
+              <button className="danger-button" type="button" disabled={submitting || !isValidRejectionReason(rejectReason)} onClick={() => void handleReject()}>{submitting ? "正在提交…" : "确认拒绝报名"}</button>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -53,6 +53,22 @@ export function approveApplication(applicationId: string): Promise<ApplicationMu
   );
 }
 
+export function rejectApplication(applicationId: string, reason: string): Promise<ApplicationMutationResult> {
+  return execute(
+    () => repository.rejectApplication(applicationId, reason),
+    (value) => mapMutationResult(value, "already_applied"),
+    "报名拒绝失败，请核对原因后重试",
+  );
+}
+
+export function cancelApplication(applicationId: string): Promise<ApplicationMutationResult> {
+  return execute(
+    () => repository.cancelApplication(applicationId),
+    (value) => mapMutationResult(value, "already_cancelled"),
+    "取消报名失败，请稍后重试",
+  );
+}
+
 export function finishApplication(applicationId: string, actualMinutes: number): Promise<ApplicationMutationResult> {
   return execute(
     () => repository.completeApplication(applicationId, actualMinutes),

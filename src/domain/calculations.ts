@@ -40,6 +40,11 @@ export function isValidActualMinutes(minutes: number, scheduledMinutes: number):
     && minutes <= scheduledMinutes;
 }
 
+export function isValidRejectionReason(reason: string): boolean {
+  const trimmed = reason.trim();
+  return trimmed.length >= 1 && trimmed.length <= 500;
+}
+
 export function haversineDistanceKm(
   from: { latitude: number; longitude: number },
   to: { latitude: number; longitude: number },

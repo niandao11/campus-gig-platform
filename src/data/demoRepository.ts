@@ -70,6 +70,18 @@ export function confirmApplication(applicationId: string): Promise<unknown> {
   });
 }
 
+export function rejectApplication(applicationId: string, reason: string): Promise<unknown> {
+  return callRpc("decide_application", {
+    p_application_id: applicationId,
+    p_decision: "reject",
+    p_reason: reason,
+  });
+}
+
+export function cancelApplication(applicationId: string): Promise<unknown> {
+  return callRpc("cancel_application", { p_application_id: applicationId });
+}
+
 export function completeApplication(applicationId: string, actualMinutes: number): Promise<unknown> {
   return callRpc("complete_application", {
     p_application_id: applicationId,

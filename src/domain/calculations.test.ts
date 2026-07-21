@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateAmountCents, haversineDistanceKm, isValidActualMinutes } from "./calculations";
+import { calculateAmountCents, haversineDistanceKm, isValidActualMinutes, isValidRejectionReason } from "./calculations";
 
 describe("calculateAmountCents", () => {
   it("按分钟四舍五入计算时薪", () => {
@@ -33,6 +33,15 @@ describe("isValidActualMinutes", () => {
     expect(isValidActualMinutes(-1, 300)).toBe(false);
     expect(isValidActualMinutes(1.5, 300)).toBe(false);
     expect(isValidActualMinutes(301, 300)).toBe(false);
+  });
+});
+
+describe("isValidRejectionReason", () => {
+  it("拒绝原因去除空白后必须为1到500字", () => {
+    expect(isValidRejectionReason(" ")).toBe(false);
+    expect(isValidRejectionReason("班次要求已调整")).toBe(true);
+    expect(isValidRejectionReason("a".repeat(500))).toBe(true);
+    expect(isValidRejectionReason("a".repeat(501))).toBe(false);
   });
 });
 
