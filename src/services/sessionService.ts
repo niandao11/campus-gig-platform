@@ -23,7 +23,12 @@ export async function bootstrapDemoSession(): Promise<SessionBootstrapResult> {
     }
   } catch (error) {
     const detail = error instanceof repository.DemoRepositoryError ? error.causeMessage : null;
-    return { configured: true, ready: false, error: detail || "云端连接失败，请稍后重试。" };
+    const userSafeDetail = detail && /[\u3400-\u9fff]/u.test(detail) ? detail : null;
+    return {
+      configured: true,
+      ready: false,
+      error: userSafeDetail || "云端连接失败，请稍后重试。",
+    };
   }
 
   return { configured: true, ready: true, error: null };

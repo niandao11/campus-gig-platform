@@ -49,4 +49,16 @@ describe("匿名演示会话故障反馈", () => {
       error: "云端连接失败，请稍后重试。",
     });
   });
+
+  it("仓储层英文错误详情不会泄露到中文界面", async () => {
+    repositoryMocks.readAuthSession.mockRejectedValue(
+      new repository.DemoRepositoryError("读取失败", "Failed to fetch"),
+    );
+
+    await expect(bootstrapDemoSession()).resolves.toEqual({
+      configured: true,
+      ready: false,
+      error: "云端连接失败，请稍后重试。",
+    });
+  });
 });
