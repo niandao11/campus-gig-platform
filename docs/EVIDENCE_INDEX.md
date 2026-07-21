@@ -126,46 +126,80 @@ G2 为 migration-ready 契约审查，尚未实际创建 Supabase 表、策略�
 
 每阶段完成后追加：commit SHA、执行环境与时间、测试命令、Preview/Production URL、关键截图、数据库检查、已知限制和三方票决。
 
-## G3：本地代码校准（云端闸门未关闭）
+## G3：工程骨架与云端校准（实网闸门待完成）
 
-复核时间：2026-07-21 13:02:05 +08:00。
+复核时间：2026-07-21 14:28:41 +08:00。
 
-执行环境：Windows / `feat/g3-foundation` / Node.js 22（Codex bundled runtime）。
+执行环境：Windows / `feat/g3-foundation` / Node.js 22（Codex bundled runtime）/ Vercel Preview / Supabase。
 
-代码提交：`0881711d5e3b969bf3aebf15ec2e7e4c00344cbc`（工程、前端骨架、migration）
+- 工程与 migration 提交：`0881711d5e3b969bf3aebf15ec2e7e4c00344cbc`；
+- 当前应用与部署提交：`164b50ad865e8c3b6222fa9a034b54e1bc8d98a0`；
+- GitHub 远端 `feat/g3-foundation` 与本地提交一致；
+- Vercel Deployment Details 显示来源 `feat/g3-foundation`、SHA `164b50a`、状态 `Ready Latest`；
+- Preview 基础域名：`https://campus-gig-platform-git-feat-g3-foundation-campus-gig-platform.vercel.app`；
+- Preview 通过 Vercel “Anyone with the link can view and comment”分享访问；访问令牌不写入公开仓库。
 
 ### 自动检查
 
 | 检查 | 命令/方式 | 结果 |
 |---|---|---|
-| TypeScript | `tsc -b --pretty false` | 通过 |
-| ESLint | `eslint src --ext .ts,.tsx --max-warnings 0` | 通过，0 warning |
-| Vitest | `vitest run` | 2个文件、8项测试全部通过 |
-| Production build | `vite build` | 通过，81 modules；JS gzip 112.87kB；CSS gzip 1.91kB |
-| 旧模板扫描 | 构建产物扫描 `YUVASREE`、`TechFest`、`Python Scraper` 等 | 零命中 |
-| 密钥扫描 | 仓库扫描 JWT、`service_role`、GitHub token 和非空真实环境变量 | 零命中 |
-| SQL静态检查 | 表、RLS、policy、RPC、权限、行锁、幂等和事务走查 | 9张表、9次RLS、9条策略、5条模板、10个受控RPC；未发现静态阻塞 |
+| TypeScript | 本地 `tsc -b --pretty false` | 通过 |
+| ESLint | 本地 `eslint src --ext .ts,.tsx --max-warnings 0` | 通过，0 warning |
+| Vitest | 本地 `vitest run` | 2个文件、8项测试全部通过 |
+| Production build | 本地 `tsc -b && vite build` | 通过，81 modules；JS gzip 112.86kB；CSS gzip 1.91kB |
+| 旧模板扫描 | 本地 `dist` 与部署 JS 扫描 `YUVASREE`、`TechFest`、`Python Scraper`、印度注册号和美元技术任务 | 零命中 |
+| 密钥扫描 | 实际 `sb_secret_*`、`service_role` JWT claim、数据库连接串及被跟踪真实 `.env` | 零命中；Supabase 客户端库的字面量类型标记不作为密钥命中 |
+| 工作树 | `git status --short` | 自动检查前为干净工作树；当前仅本证据回写待提交 |
 
-### 浏览器证据
+### Supabase 与权限证据
 
-- 直接访问 `/employer/dashboard` 时，当前角色和导航均正确显示“招聘方端”；
-- 375×812：页面 `scrollWidth = clientWidth`，主要按钮不小于44px，三项移动导航无截断，移动Demo说明可见；
-- 1440×900：页面 `scrollWidth = clientWidth`，布局无横向溢出；
-- [375×812 截图](evidence/g3-local-375x812.jpg)；
-- [1440×900 截图](evidence/g3-local-1440x900.jpg)。
+- 用户已在 Supabase SQL Editor 执行 `202607210001_init_demo.sql`，结果为 `Success. No rows returned`；
+- Anonymous Sign-ins 已开启；
+- 匿名注册返回有效会话，`initialize_demo_session()` 返回 `XX大学` 和有效会话ID；
+- `get_current_demo_jobs()` 返回恰好5条且均有实例ID；前端只有在上述全部条件满足时才显示“工程骨架与云端已连接”；
+- 两个新匿名会话各返回5条班次，实例ID交集为0；
+- 重置会话A后，A的5条班次全部重建，会话B的5条班次ID全部保持不变；
+- 浏览器令牌直接读取 `demo_sessions` 基表返回HTTP 403；直接写入同一基表也返回HTTP 403；
+- 测试只使用公开 publishable key，未读取或使用数据库密码、Secret key 或 `service_role` key。
 
-### 三方本地代码票
+### Vercel 浏览器与响应式证据
 
-- 产品负责人：无条件同意；
-- 技术架构负责人：无条件同意；
-- 交付与质量负责人：无条件同意。
+- 带分享授权的 Preview 在未登录 Vercel 的新浏览器环境中可访问，页面标题为“校园零工平台”；
+- 根路由正确进入 `/student/jobs`，中文工程壳约1.4秒可见；
+- `/student/jobs` 与 `/employer/dashboard` 可直接访问，约2.1秒内显示云端连接成功，无404；
+- `/employer/dashboard` 刷新后仍保持招聘方角色、招聘方导航和云端连接状态；
+- 学生端点击“招聘方端”可进入 `/employer/dashboard`；
+- 浏览器控制台 warning/error 为0；
+- 375×812、390×844、768×1024、1440×900：`scrollWidth <= clientWidth`，无越界元素；
+- 四个视口的学生端/招聘方端角色按钮高度均为44px；
+- [375×812 本地截图](evidence/g3-local-375x812.jpg)；
+- [1440×900 本地截图](evidence/g3-local-1440x900.jpg)；
+- 用户提供的 Vercel 与云端成功截图作为本轮对话证据保留，未复制包含分享访问令牌的截图到公开仓库。
 
-### 未关闭的云端环境闸门
+### 三方正式表决前预审
 
-- GitHub推送：本机没有可用写入认证；非交互推送等待后已安全中止，远端尚无 `feat/g3-foundation`；
-- Supabase：migration尚未实际执行，Anonymous Auth、RPC、RLS越权和双会话隔离尚未实测；
-- Vercel：尚未生成与本提交对应的Preview，旧英文模板尚未被替换；
-- 实网：中国大陆无VPN宽带和手机网络各3次测试尚未执行；
-- 768×1024、390×844及Edge证据尚待后续质量阶段补齐。
+- 产品负责人：产品范围、中文演示属性、角色与页面认知未发现新阻塞；
+- 技术架构负责人：工程分层、Supabase/RPC/RLS、会话隔离和部署未发现新阻塞；
+- 交付与质量负责人：自动化、路由、四视口、控制台、安全与旧模板扫描未发现新阻塞；
+- 三方一致结论：当前仅缺大陆无VPN实网证据；完成下表6次测试后才具备G3正式表决条件。
 
-结论：G3本地代码已通过三方校准，但G3总体未通过；不得进入G4，直至上述云端环境闸门完成并重新三方表决。
+### 中国大陆无 VPN 实网记录
+
+每次要求：应用壳不超过10秒；Anonymous Auth与首条数据不超过20秒；无HTTP、网络或Auth错误；不需要人工重试。
+
+| 次数 | 网络 | 测试时间（+08:00） | 应用壳耗时 | 云端已连接耗时 | 错误/人工重试 | 结果 |
+|---|---|---|---|---|---|---|
+| 1 | 普通宽带 | 待用户实测 | — | — | — | 待测 |
+| 2 | 普通宽带 | 待用户实测 | — | — | — | 待测 |
+| 3 | 普通宽带 | 待用户实测 | — | — | — | 待测 |
+| 4 | 手机蜂窝网络 | 待用户实测 | — | — | — | 待测 |
+| 5 | 手机蜂窝网络 | 待用户实测 | — | — | — | 待测 |
+| 6 | 手机蜂窝网络 | 待用户实测 | — | — | — | 待测 |
+
+### 当前结论与未关闭闸门
+
+- G3仍为“进行中”，不得进入G4；
+- 用户须完成上表普通宽带和手机网络各连续3次无VPN测试；
+- 实网证据回写后，产品、技术、质量三位专家须分别作出正式无条件同意票；
+- 通过三票后才能合并 `main`，并继续核对 Production SHA 与 GitHub `main` 一致、旧生产模板被覆盖；
+- Edge最新稳定版完整主流程证据按既定G6质量阶段补充，不作为当前G3工程连通硬阻塞。
