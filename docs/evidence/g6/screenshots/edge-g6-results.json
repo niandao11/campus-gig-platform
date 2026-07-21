@@ -1,66 +1,66 @@
 {
-  "baseUrl": "https://campus-gig-platform-ioytlibe3-campus-gig-platform.vercel.app",
+  "baseUrl": "https://campus-gig-platform-fo23hh2f3-campus-gig-platform.vercel.app",
   "browser": "Edg/150.0.4078.65",
   "screenshots": [
     {
       "file": "docs/evidence/g6/screenshots/01-jobs-390.png",
-      "sha256": "df4ff436307c3d4837594fbd8acb780a44c2d150e0ef0affc768b01b300053a1",
-      "bytes": 61837
+      "sha256": "b003b04326fd2a788221ce31548020ef7e39b64127e79a89a00924cb4049494a",
+      "bytes": 51032
     },
     {
       "file": "docs/evidence/g6/screenshots/02-cancel-pending-390.png",
-      "sha256": "72bbf616917b765b93acc13e5f499949738f6a54284a3bfd5e868119e50ab302",
-      "bytes": 71042
+      "sha256": "3ae0133896306427231e118cf1866f29b76c261d9e44d2eb9ae36c9f5e0d9b0a",
+      "bytes": 52694
     },
     {
       "file": "docs/evidence/g6/screenshots/03-cancel-network-error-390.png",
-      "sha256": "31cf0b4851d51f0c4b5b37714011618b5c7998d59dbd49e0afe70e5937ab045b",
-      "bytes": 68554
+      "sha256": "25f60e13f77ecf7ea25ff048f9d484be72b3fc02422c5bf6497c91c22b416c58",
+      "bytes": 52405
     },
     {
       "file": "docs/evidence/g6/screenshots/04-cancelled-390.png",
-      "sha256": "850b0907271f0e830bac436e2777777525e51e3c0b229d2544668a85b852e9cd",
-      "bytes": 59513
+      "sha256": "ab03e472a549ed1b5a8b1cd3a471f192dae1edb845ae884c5d1bb65d962574fc",
+      "bytes": 58539
     },
     {
       "file": "docs/evidence/g6/screenshots/05-reject-empty-390.png",
-      "sha256": "6e1083775d88687566cca57a686eda2c2ecd3273cd97b848481b3c508c215b18",
-      "bytes": 46622
+      "sha256": "66076c3a50e901adeb0dd1634328f9ad58cb3a7d1d2e9dea16ae870a4c148df0",
+      "bytes": 47719
     },
     {
       "file": "docs/evidence/g6/screenshots/06-rejected-employer-390.png",
-      "sha256": "a6799e9eea06cff8148d5850bbb1e5be049748ed3466d2d9ba14608ad71796a6",
-      "bytes": 52390
+      "sha256": "cf425f9850e350fe13a726f450980d0d19e0b69be0970983aa5fbce61b56c787",
+      "bytes": 51768
     },
     {
       "file": "docs/evidence/g6/screenshots/07-rejected-student-390.png",
-      "sha256": "09b597859b650482eff08c3a06006c76b107c13643678e80347472d9cc991905",
-      "bytes": 53338
+      "sha256": "30b08949c25f084652f81e5e04b49751588b98e2d32c0c2441e8280664d31f47",
+      "bytes": 52321
     },
     {
       "file": "docs/evidence/g6/screenshots/08-refresh-network-error-390.png",
-      "sha256": "8aaa053b66774c6f539a7fa1d61a8aa60a1c01b0195b88dfc7304b47ba794bb1",
-      "bytes": 59185
+      "sha256": "d4d5d1a918eb15f362e301d7b9022c4a320b0b6ded718f690acef0506e18673e",
+      "bytes": 58120
     },
     {
       "file": "docs/evidence/g6/screenshots/09-bootstrap-network-error-390.png",
-      "sha256": "0fa53b7dc01b2feb0e6654f0c3f8d6f0eb6448667ca145220f161afa2b8628d9",
-      "bytes": 63823
+      "sha256": "94fb3afce6b4cc8d1f75322f797eabec44068ecb2684939c6fbf4915c401ecd0",
+      "bytes": 66726
     },
     {
       "file": "docs/evidence/g6/screenshots/10-jobs-375.png",
-      "sha256": "a48c88910133fdfb880abc666be6ce744f07a1fdaf36d3527cff6eae2ed2646f",
-      "bytes": 50424
+      "sha256": "e38158d952682f136de55285bce9207d0f9943da740d85aab856cca3b9be8c85",
+      "bytes": 49170
     },
     {
       "file": "docs/evidence/g6/screenshots/11-jobs-768.png",
-      "sha256": "edd1ea2a088d0fa2782e1b7e072048685d2944c8ed695ca2438f2338c4db2065",
-      "bytes": 70545
+      "sha256": "425cfb83241020d3c90b37415fe900ef1410a17104531d072f67d3779cd69156",
+      "bytes": 68330
     },
     {
       "file": "docs/evidence/g6/screenshots/12-jobs-1440.png",
-      "sha256": "c3e23a66e3510a5d5cad3e104b92ae1f9e85dafee956b8a8baefaa6ad02db3d1",
-      "bytes": 103895
+      "sha256": "dd164679a8155dad59806b3f7516cec4b2106b51276a3af9c7a5b2a0307d65af",
+      "bytes": 101475
     }
   ],
   "checks": [
@@ -108,7 +108,7 @@
       }
     }
   ],
-  "startedAt": "2026-07-21T13:16:23.312Z",
-  "completedAt": "2026-07-21T13:16:40.548Z",
+  "startedAt": "2026-07-21T13:30:48.624Z",
+  "completedAt": "2026-07-21T13:31:02.197Z",
   "passed": true
 }

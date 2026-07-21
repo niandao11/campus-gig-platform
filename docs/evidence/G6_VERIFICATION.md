@@ -2,9 +2,9 @@
 
 - 执行日期：2026-07-21（北京时间）
 - 分支：`feat/g6-quality`
-- 应用实现提交：`995d72a747a001123020826fc9a271db6878f459`
-- 测试补充提交：`92c069f`
-- Preview：[campus-gig-platform-ioytlibe3-campus-gig-platform.vercel.app](https://campus-gig-platform-ioytlibe3-campus-gig-platform.vercel.app)
+- 应用实现提交：`c4de0aeef402a46f3d503c4032ae13279aa354e8`
+- 关键修复提交：`30256fd`（英文底层错误本地化）、`c4de0ae`（消除弹层定位动画竞态）
+- Preview：[campus-gig-platform-fo23hh2f3-campus-gig-platform.vercel.app](https://campus-gig-platform-fo23hh2f3-campus-gig-platform.vercel.app)
 - 网络说明：Preview 浏览器验收使用可访问 Vercel/Supabase 的代理环境；不得写成中国大陆无 VPN 直连通过。D-020 保留至 G7。
 
 ## 自动门禁
@@ -13,13 +13,13 @@
 | --- | --- |
 | `tsc -b --force --pretty false` | 通过 |
 | `eslint src --ext .ts,.tsx --max-warnings 0` | 通过，0 warning |
-| Vitest | 5 个文件、26 项用例全绿 |
-| `pnpm run build` | 通过；Vite 100 modules，JS gzip 127.50 kB，CSS gzip 5.20 kB |
+| Vitest | 5 个文件、27 项用例全绿 |
+| `pnpm run build` | 通过；Vite 100 modules，JS gzip 127.55 kB，CSS gzip 5.19 kB |
 | 页面层直接调用 Supabase | 零命中；仍为 page → service → repository → RPC |
 | migration/state machine | 未修改；SHA-256 见下文 |
 | 实际密钥模式 | 未发现实际 `sb_secret_*`、数据库连接串或 `service_role` JWT；治理文档中的禁止性文字不作为密钥命中 |
 
-新增测试覆盖：拒绝原因 trim 后 1–500 字、匿名 Auth/云端连接失败不伪造 ready、中文安全错误和通用重试文案。
+新增测试覆盖：拒绝原因 trim 后 1–500 字、匿名 Auth/云端连接失败不伪造 ready、中文安全错误、英文底层错误过滤和通用重试文案。
 
 ## 学生取消异常流
 
@@ -72,7 +72,7 @@
 | 1440 × 900 | `scrollWidth = clientWidth = 1425`；筛选四列 |
 
 - 可见主要按钮、链接、输入控件最小高度 44px；
-- 新增弹层支持 Escape 关闭（提交中除外），提交中按钮禁用；
+- 新增弹层支持 Escape 关闭（提交中除外），提交中按钮禁用；页面容器不再使用会短暂改变 fixed 定位上下文的入场动画；
 - Chromium 自动化与 Microsoft Edge `150.0.4078.65` 均完成主路径、取消、拒绝和错误态验收；
 - 最新 Preview 首屏 J-01 位于首位，控制台应用 error/warn 为 0；
 - `/`、学生三条路由、招聘方三条路由均 HTTP 200。
@@ -83,18 +83,18 @@ Edge QA 脚本：`scripts/edge-g6-qa.mjs`；结构化结果：`docs/evidence/g6/
 
 | 截图 | 场景 | SHA-256 |
 | --- | --- | --- |
-| `01-jobs-390.png` | 390 岗位首页 | `df4ff436307c3d4837594fbd8acb780a44c2d150e0ef0affc768b01b300053a1` |
-| `02-cancel-pending-390.png` | pending 取消入口 | `72bbf616917b765b93acc13e5f499949738f6a54284a3bfd5e868119e50ab302` |
-| `03-cancel-network-error-390.png` | 取消 mutation 网络失败 | `31cf0b4851d51f0c4b5b37714011618b5c7998d59dbd49e0afe70e5937ab045b` |
-| `04-cancelled-390.png` | cancelled 终态 | `850b0907271f0e830bac436e2777777525e51e3c0b229d2544668a85b852e9cd` |
-| `05-reject-empty-390.png` | 拒绝原因必填 | `6e1083775d88687566cca57a686eda2c2ecd3273cd97b848481b3c508c215b18` |
-| `06-rejected-employer-390.png` | 招聘方 rejected 终态 | `a6799e9eea06cff8148d5850bbb1e5be049748ed3466d2d9ba14608ad71796a6` |
-| `07-rejected-student-390.png` | 学生回读拒绝原因 | `09b597859b650482eff08c3a06006c76b107c13643678e80347472d9cc991905` |
-| `08-refresh-network-error-390.png` | 已有数据刷新失败 | `8aaa053b66774c6f539a7fa1d61a8aa60a1c01b0195b88dfc7304b47ba794bb1` |
-| `09-bootstrap-network-error-390.png` | 首次会话连接失败 | `0fa53b7dc01b2feb0e6654f0c3f8d6f0eb6448667ca145220f161afa2b8628d9` |
-| `10-jobs-375.png` | 375×812 | `a48c88910133fdfb880abc666be6ce744f07a1fdaf36d3527cff6eae2ed2646f` |
-| `11-jobs-768.png` | 768×1024 | `edd1ea2a088d0fa2782e1b7e072048685d2944c8ed695ca2438f2338c4db2065` |
-| `12-jobs-1440.png` | 1440×900 | `c3e23a66e3510a5d5cad3e104b92ae1f9e85dafee956b8a8baefaa6ad02db3d1` |
+| `01-jobs-390.png` | 390 岗位首页 | `b003b04326fd2a788221ce31548020ef7e39b64127e79a89a00924cb4049494a` |
+| `02-cancel-pending-390.png` | pending 取消入口 | `3ae0133896306427231e118cf1866f29b76c261d9e44d2eb9ae36c9f5e0d9b0a` |
+| `03-cancel-network-error-390.png` | 取消 mutation 网络失败 | `25f60e13f77ecf7ea25ff048f9d484be72b3fc02422c5bf6497c91c22b416c58` |
+| `04-cancelled-390.png` | cancelled 终态 | `ab03e472a549ed1b5a8b1cd3a471f192dae1edb845ae884c5d1bb65d962574fc` |
+| `05-reject-empty-390.png` | 拒绝原因必填 | `66076c3a50e901adeb0dd1634328f9ad58cb3a7d1d2e9dea16ae870a4c148df0` |
+| `06-rejected-employer-390.png` | 招聘方 rejected 终态 | `cf425f9850e350fe13a726f450980d0d19e0b69be0970983aa5fbce61b56c787` |
+| `07-rejected-student-390.png` | 学生回读拒绝原因 | `30b08949c25f084652f81e5e04b49751588b98e2d32c0c2441e8280664d31f47` |
+| `08-refresh-network-error-390.png` | 已有数据刷新失败 | `d4d5d1a918eb15f362e301d7b9022c4a320b0b6ded718f690acef0506e18673e` |
+| `09-bootstrap-network-error-390.png` | 首次会话连接失败（仅中文） | `94fb3afce6b4cc8d1f75322f797eabec44068ecb2684939c6fbf4915c401ecd0` |
+| `10-jobs-375.png` | 375×812 | `e38158d952682f136de55285bce9207d0f9943da740d85aab856cca3b9be8c85` |
+| `11-jobs-768.png` | 768×1024 | `425cfb83241020d3c90b37415fe900ef1410a17104531d072f67d3779cd69156` |
+| `12-jobs-1440.png` | 1440×900 | `dd164679a8155dad59806b3f7516cec4b2106b51276a3af9c7a5b2a0307d65af` |
 
 ## 冻结契约哈希
 
