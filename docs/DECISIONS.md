@@ -47,7 +47,8 @@
 | D-013 | 业务写入仅通过受控 RPC，RLS按 `auth.uid()` 隔离，浏览器不直接写业务表 | Approved |
 | D-014 | 时薪金额按分钟四舍五入到分，实际分钟为1到计划分钟且不支持加班 | Approved |
 | D-015 | G3前置进行大陆无VPN宽带与手机网络各3次云连通冒烟 | Approved |
-| D-017 | 将当前G3分支别名加入Vercel Deployment Protection Exception，Production可用后移除 | Approved |
+| D-017 | 将当前G3分支别名加入Vercel Deployment Protection Exception，Production可用后移除 | Superseded by D-018 |
+| D-018 | 临时关闭当前 `campus-gig-platform` 项目的 Vercel Authentication，Production可用后恢复 | Approved |
 
 ## D-016：硬截止时间
 
@@ -72,7 +73,13 @@
 
 | ID | 日期 | 理由 | 作用范围 | 三方票源 | 回滚点 |
 |---|---|---|---|---|---|
-| D-017 | 2026-07-21 | 大陆手机蜂窝首次访问带 `_vercel_share` 的 Preview 超时；移除额外分享鉴权链路后才能区分 Vercel 应用访问与保护服务问题 | 仅 `campus-gig-platform-git-feat-g3-foundation-campus-gig-platform.vercel.app`；不关闭其他 Preview 或团队保护 | 产品/技术/质量均无条件同意 | Production 公开链接验收后移除该域名例外并复核 Preview 重新受保护 |
+| D-017 | 2026-07-21 | 大陆手机蜂窝首次访问带 `_vercel_share` 的 Preview 超时；移除额外分享鉴权链路后才能区分 Vercel 应用访问与保护服务问题 | 仅 `campus-gig-platform-git-feat-g3-foundation-campus-gig-platform.vercel.app`；不关闭其他 Preview 或团队保护 | 产品/技术/质量均无条件同意；后因 Hobby 不支持该功能而被 D-018 替代 | Superseded by D-018 |
+
+### D-018 审计信息
+
+| ID | 日期 | 理由 | 作用范围 | 三方票源 | 回滚点 |
+|---|---|---|---|---|---|
+| D-018 | 2026-07-21 | Hobby 的 Deployment Protection Exceptions 仅随 Pro Advanced Protection 提供，不能免费执行 D-017；关闭当前项目 Require Log In 是解除 Preview 登录/分享鉴权的免费路径 | 仅 `campus-gig-platform` 项目全部 Preview；不影响其他项目或团队设置 | 产品/技术/质量均无条件同意 | Production 公开链接验收后重新开启 Require Log In，并确认 Preview 恢复保护 |
 
 ## 尚需阶段验收
 

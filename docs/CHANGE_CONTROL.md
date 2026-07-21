@@ -83,4 +83,26 @@ CR 统一保存在本文件末尾的“变更记录”章节，编号格式为 `
 - 产品负责人：无条件同意；
 - 技术架构负责人：无条件同意；
 - 交付与质量负责人：无条件同意；
+- 最终状态：Superseded by CR-20260721-002。Vercel 后台确认该功能只向 Pro + Advanced Deployment Protection 提供，Hobby 无法执行，未产生外部设置变更。
+
+### CR-20260721-002：临时关闭当前项目 Vercel Authentication
+
+- 提出日期：2026-07-21
+- 提出者：Codex G3 校准
+- 当前批准规则：CR-20260721-001 拟只放行一个 Preview 域名，但 Vercel 后台确认 Deployment Protection Exceptions 在当前 Hobby 计划不可用。
+- 拟议变更：关闭 `campus-gig-platform` 项目 Deployment Protection 中的 `Require Log In`，临时公开该项目全部 Preview；不改变团队级设置或其他项目。
+- 原因：免费解除 Vercel Authentication 和 Shareable Link 鉴权链路，才能使用无 query 域名完成大陆手机网络真实访问测试；不升级每月150美元的 Pro Advanced Protection。
+- 影响页面：当前项目所有 Preview 路由；Production 在 Hobby Standard Protection 下原本即公开。
+- 影响状态/数据/RLS：无。Supabase Anonymous Auth、`auth.uid()` 会话隔离、RLS、受控 RPC 和基表403边界保持不变。
+- 影响测试：使用无 `_vercel_share`、无 query 的分支别名，重新执行普通宽带和手机蜂窝各3次；阈值和失败判定不变。
+- 影响交付时间：增加一次免费项目设置切换和复测；不改变硬截止。
+- 替代方案：支付 Pro Advanced Protection 以使用单域名例外，成本与短期合成 Demo 不匹配，不采用。
+- 风险：该项目其他 Preview 暂时公开，可能增加匿名会话和免费额度消耗；当前单项目、短周期、全合成数据且无密钥，风险可接受。
+- 回滚点：Production 公开链接验收后重新开启 `Require Log In`，复核 Preview 恢复保护且 Production 仍公开。
+
+票决：
+
+- 产品负责人：无条件同意；
+- 技术架构负责人：无条件同意；
+- 交付与质量负责人：无条件同意；
 - 最终状态：Approved。
