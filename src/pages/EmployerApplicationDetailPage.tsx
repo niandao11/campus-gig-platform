@@ -35,8 +35,9 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
     setActionSuccess(null);
     try {
       const result = await approveApplication(currentApplicationId);
-      setActionSuccess(result.repeated ? "该报名此前已确认，已读取当前真实状态。" : "报名已确认，学生端现在可以读取新状态。");
+      const successMessage = result.repeated ? "该报名此前已确认，已读取当前真实状态。" : "报名已确认，学生端现在可以读取新状态。";
       await reload();
+      setActionSuccess(successMessage);
     } catch (mutationError) {
       setActionError(mutationError instanceof Error ? mutationError.message : "确认失败，请重试");
     } finally {
@@ -54,8 +55,9 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
     setActionSuccess(null);
     try {
       const result = await finishApplication(currentApplicationId, parsedMinutes);
-      setActionSuccess(result.repeated ? "该报名此前已核定完工，未生成重复事件或结算记录。" : "完工已核定，数据库已原子生成唯一待模拟结算记录。");
+      const successMessage = result.repeated ? "该报名此前已核定完工，未生成重复事件或结算记录。" : "完工已核定，数据库已原子生成唯一待模拟结算记录。";
       await reload();
+      setActionSuccess(successMessage);
     } catch (mutationError) {
       setActionError(mutationError instanceof Error ? mutationError.message : "完工核定失败，请重试");
     } finally {
@@ -74,9 +76,10 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
     setActionSuccess(null);
     try {
       const result = await rejectApplication(currentApplicationId, reason);
-      setActionSuccess(result.repeated ? "该报名此前已拒绝，已读取当前真实状态。" : "报名已拒绝，原因和名额变化已写入云端事件。");
+      const successMessage = result.repeated ? "该报名此前已拒绝，已读取当前真实状态。" : "报名已拒绝，原因和名额变化已写入云端事件。";
       setShowReject(false);
       await reload();
+      setActionSuccess(successMessage);
     } catch (mutationError) {
       setActionError(mutationError instanceof Error ? mutationError.message : "拒绝报名失败，请重试");
     } finally {
@@ -176,7 +179,7 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
       </section>
       {showReject && application.status === "pending" ? (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => !submitting && setShowReject(false)}>
-          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="reject-title" onMouseDown={(event) => event.stopPropagation()}>
+          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="reject-title" onKeyDown={(event) => { if (event.key === "Escape" && !submitting) setShowReject(false); }} onMouseDown={(event) => event.stopPropagation()}>
             <span className="section-kicker">招聘方拒绝报名</span>
             <h2 id="reject-title">填写未通过原因</h2>
             <p>原因会写入报名事件并展示给学生；不能为空，最多 500 字。</p>
@@ -185,7 +188,7 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
             <div className="textarea-meta">{rejectReason.trim().length}/500 字</div>
             {actionError ? <p className="inline-error" role="alert">{actionError} 当前状态未被伪造，可继续修改原因后重试。</p> : null}
             <div className="modal-actions">
-              <button className="secondary-button" type="button" disabled={submitting} onClick={() => setShowReject(false)}>返回修改</button>
+              <button className="secondary-button" type="button" disabled={submitting} onClick={() => setShowReject(false)}>暂不拒绝</button>
               <button className="danger-button" type="button" disabled={submitting || !isValidRejectionReason(rejectReason)} onClick={() => void handleReject()}>{submitting ? "正在提交…" : "确认拒绝报名"}</button>
             </div>
           </section>

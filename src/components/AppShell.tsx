@@ -112,7 +112,7 @@ export function AppShell({ children, role, sessionState, onRoleSwitch, onReset }
 
       {showReset ? (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => !resetting && setShowReset(false)}>
-          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="reset-title" onMouseDown={(event) => event.stopPropagation()}>
+          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="reset-title" onKeyDown={(event) => { if (event.key === "Escape" && !resetting) setShowReset(false); }} onMouseDown={(event) => event.stopPropagation()}>
             <span className="section-kicker">重置当前匿名会话</span>
             <h2 id="reset-title">确认恢复演示基线？</h2>
             <p>当前会话的报名、事件和班次实例会被清除并重建；岗位模板和其他访问者的会话不会受影响。</p>

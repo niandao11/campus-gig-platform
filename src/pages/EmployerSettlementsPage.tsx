@@ -31,8 +31,9 @@ export function EmployerSettlementsPage({ refreshKey }: { refreshKey: number }) 
     setActionSuccess(null);
     try {
       const result = await confirmDemoSettlement(applicationId);
-      setActionSuccess(result.repeated ? "该记录此前已完成模拟结算，没有生成重复事件。" : "Demo模拟结算已确认，学生端可以读取最终金额与完整时间线。");
+      const successMessage = result.repeated ? "该记录此前已完成模拟结算，没有生成重复事件。" : "Demo模拟结算已确认，学生端可以读取最终金额与完整时间线。";
       await reload();
+      setActionSuccess(successMessage);
     } catch (mutationError) {
       setActionError(mutationError instanceof Error ? mutationError.message : "Demo模拟结算失败，请重试");
     } finally {

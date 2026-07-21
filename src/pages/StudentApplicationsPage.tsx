@@ -36,9 +36,10 @@ export function StudentApplicationsPage({ refreshKey }: { refreshKey: number }) 
     setCancelSuccess(null);
     try {
       const result = await cancelApplication(cancelTarget.id);
-      setCancelSuccess(result.repeated ? "该报名此前已取消，当前状态未重复变更。" : "报名已取消，名额已按云端规则释放一次。");
+      const successMessage = result.repeated ? "该报名此前已取消，当前状态未重复变更。" : "报名已取消，名额已按云端规则释放一次。";
       setCancelTarget(null);
       await reload();
+      setCancelSuccess(successMessage);
     } catch (mutationError) {
       setCancelError(mutationError instanceof Error ? mutationError.message : "取消报名失败，请重试");
     } finally {
@@ -106,7 +107,7 @@ export function StudentApplicationsPage({ refreshKey }: { refreshKey: number }) 
       <Link className="back-link" to="/student/jobs">← 返回岗位列表</Link>
       {cancelTarget ? (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => !cancelSubmitting && setCancelTarget(null)}>
-          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="cancel-title" onMouseDown={(event) => event.stopPropagation()}>
+          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="cancel-title" onKeyDown={(event) => { if (event.key === "Escape" && !cancelSubmitting) setCancelTarget(null); }} onMouseDown={(event) => event.stopPropagation()}>
             <span className="section-kicker">取消报名</span>
             <h2 id="cancel-title">确认取消这条报名？</h2>
             <p>取消后报名进入“报名已取消”终态，当前班次名额只释放一次；招聘方不会再看到待处理动作。</p>

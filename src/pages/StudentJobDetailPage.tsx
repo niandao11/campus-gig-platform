@@ -136,7 +136,7 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
 
       {showConfirmation ? (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => !submitting && setShowConfirmation(false)}>
-          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="apply-title" onMouseDown={(event) => event.stopPropagation()}>
+          <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="apply-title" onKeyDown={(event) => { if (event.key === "Escape" && !submitting) setShowConfirmation(false); }} onMouseDown={(event) => event.stopPropagation()}>
             <span className="section-kicker">提交前确认</span>
             <h2 id="apply-title">确认报名 {job.title}</h2>
             <p>报名将占用 1 个名额，并创建“待招聘方确认”的真实云端记录。</p>
