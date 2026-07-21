@@ -120,7 +120,7 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
         </article>
 
         <article className="content-card action-card">
-          <span className="section-kicker">唯一合法下一步</span>
+          <span className="section-kicker">当前可处理动作</span>
           {application.status === "pending" ? (
             <>
               <h2>确认学生报名</h2>
