@@ -53,7 +53,7 @@ export function StudentJobsPage({ refreshKey }: { refreshKey: number }) {
       <header className="page-heading">
         <div className="eyebrow">学生端 · 岗位发现</div>
         <h1>周末有空，先找到一份信息透明的零工</h1>
-        <p className="lede">同一所校园、同一招聘方的五条真实班次样例；筛选、比较、报名与后续结算都读取当前会话的云端数据。</p>
+        <p className="lede">同一所校园、同一招聘方的五条合成演示班次，覆盖真实校园零工形态；筛选、比较、报名与后续结算都读取当前会话的云端数据。</p>
       </header>
 
       {error ? <PageFeedback tone="error" title="刷新失败" detail={`${error}。当前仍展示上次成功读取的真实状态。`} actionLabel="重试" onAction={() => void reload()} /> : null}
