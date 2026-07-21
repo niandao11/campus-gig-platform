@@ -47,7 +47,7 @@ export function StudentApplicationsPage({ refreshKey }: { refreshKey: number }) 
             </div>
             <ApplicationTimeline events={application.events} />
           </section>
-          {application.status === "confirmed" ? <p className="demo-notice">报名已由招聘方确认。G4 不开放取消、完工或结算操作，后续履约流程将在 G5 实现。</p> : null}
+          {application.status === "confirmed" ? <p className="demo-notice">报名已由招聘方确认，当前状态不可取消。实际工时、完工和模拟结算将在 G5 开放。</p> : null}
         </article>
       ))}
       <Link className="back-link" to="/student/jobs">← 返回岗位列表</Link>
