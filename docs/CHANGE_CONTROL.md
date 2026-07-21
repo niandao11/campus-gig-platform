@@ -63,4 +63,24 @@ CR 统一保存在本文件末尾的“变更记录”章节，编号格式为 `
 
 ## 5. 变更记录
 
-当前无已提交变更。
+### CR-20260721-001：当前 G3 Preview 分支别名公开例外
+
+- 提出日期：2026-07-21
+- 提出者：Codex G3 校准
+- 当前批准规则：Vercel Hobby Standard Protection 保护 Preview；G3 必须在大陆无 VPN 普通宽带与手机网络各连续测试3次。
+- 拟议变更：仅将 `campus-gig-platform-git-feat-g3-foundation-campus-gig-platform.vercel.app` 加入 Vercel Deployment Protection Exception，使该分支别名不经过 Vercel Authentication 或 `_vercel_share` 分享鉴权即可公开访问。
+- 原因：电脑端带分享授权访问正常，而大陆手机蜂窝无 VPN 首次访问超时；Vercel 官方文档说明 Shareable Link 需要额外鉴权，Deployment Protection Exception 可只放行指定 Preview 域名。
+- 影响页面：当前 G3 Preview 的所有前端路由。
+- 影响状态/数据/RLS：无。Supabase Anonymous Auth、`auth.uid()` 会话隔离、RLS、受控 RPC 和基表403边界保持不变。
+- 影响测试：例外启用后使用不带任何 query 的分支别名，重新执行普通宽带和手机蜂窝各3次；阈值仍为应用壳不超过10秒、Auth与首批5条岗位不超过20秒、零错误和零人工重试。
+- 影响交付时间：增加一次 Vercel 后台配置和原网络闸门复测；不改变硬截止。
+- 替代方案：直接合并 `main` 后用公开 Production 测试会违反“阶段三票后再合并 main”的既定顺序；关闭整个项目的 Vercel Authentication 扩大范围，均不采用。
+- 回滚点：Production 公开链接可用并通过验收后，从 Deployment Protection Exceptions 移除该域名，确认 Preview 恢复保护且 Production 仍公开。
+- 官方依据：<https://vercel.com/docs/deployment-protection>；<https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/deployment-protection-exceptions>。
+
+票决：
+
+- 产品负责人：无条件同意；
+- 技术架构负责人：无条件同意；
+- 交付与质量负责人：无条件同意；
+- 最终状态：Approved。
