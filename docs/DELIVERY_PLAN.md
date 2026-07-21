@@ -15,7 +15,7 @@
 | G4 最小纵向切片 | 已完成（D-020例外） | [云端报名与确认闭环证据](evidence/G4_VERIFICATION.md)；仅feat分支，不合并main |
 | G5 完整生命周期 | 已完成（D-020例外） | [完整生命周期证据](evidence/G5_VERIFICATION.md)；三方均无条件同意；仅feat分支，不合并main |
 | G6 异常与质量 | 已完成（D-020例外） | [异常与质量证据](evidence/G6_VERIFICATION.md)；三方均无条件同意；仅feat分支，不合并main |
-| G7 发布 UAT | 待开始 | Production URL、实网和无痕验收 |
+| G7 发布 UAT | 进行中 | `feat/g7-release`；发布材料、Production URL、实网和无痕验收 |
 
 ## G0：治理基线
 
