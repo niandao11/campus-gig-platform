@@ -4,6 +4,7 @@ import { PageFeedback } from "../components/PageFeedback";
 import { AvailabilityBadge } from "../components/StatusBadge";
 import { formatCurrency, haversineDistanceKm } from "../domain/calculations";
 import { formatBeijingDateTime, formatPay, formatShift } from "../domain/formatters";
+import { jobCode } from "../domain/jobDiscovery";
 import { useAsyncData } from "../hooks/useAsyncData";
 import { getJobs, submitApplication } from "../services/demoService";
 
@@ -26,6 +27,13 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
   const distance = haversineDistanceKm(data.campus, job);
   const canApply = job.availabilityStatus === "open" && !job.hasApplied;
   const jobInstanceId = job.id;
+  const unavailableReason = job.availabilityStatus === "full"
+    ? "该班次名额已满，不能报名"
+    : job.availabilityStatus === "expired"
+      ? "该班次报名已截止，不能报名"
+      : job.availabilityStatus === "cancelled"
+        ? "该班次已取消，不能报名"
+        : null;
 
   async function handleApply() {
     setSubmitting(true);
@@ -46,13 +54,13 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
         <div>
           <div className="card-topline">
             <AvailabilityBadge status={job.availabilityStatus} />
-            <span className="demo-chip">J-01 · 合成数据</span>
+            <span className="demo-chip">{jobCode(job)} · 合成直招演示岗位</span>
           </div>
           <h1>{job.title}</h1>
           <p>{job.employerName} · {job.workAddress}</p>
         </div>
         <div className="detail-pay-box">
-          <span>有效时薪</span>
+          <span>{job.payType === "daily" ? "固定日薪" : "有效时薪"}</span>
           <strong>{formatPay(job)}</strong>
           <small>预计共 {formatCurrency(job.estimatedAmountCents)}</small>
         </div>
@@ -87,7 +95,9 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
             <div><dt>工资支付主体</dt><dd>{job.paymentEntityName}</dd></div>
             <div><dt>联系部门</dt><dd>{job.contactDepartment}</dd></div>
             <div><dt>实际用工地点</dt><dd>{job.workAddress}</dd></div>
+            <div><dt>直招披露</dt><dd>{job.directHireDisclosure}</dd></div>
             <div><dt>收费项</dt><dd>押金：{job.depositRequired ? "有" : "无"} · 培训费：{job.trainingFeeRequired ? "有" : "无"} · 介绍费：{job.agencyFeeRequired ? "有" : "无"}</dd></div>
+            <div><dt>收费说明</dt><dd>{job.feeDisclosure}</dd></div>
             <div><dt>发布时间</dt><dd>{formatBeijingDateTime(job.publishedAt)}</dd></div>
             <div><dt>信息缺失项</dt><dd>{job.missingFields.length ? job.missingFields.join("、") : "无"}</dd></div>
             <div><dt>风险线索</dt><dd>{job.riskFlags.length ? job.riskFlags.join("、") : "演示字段中未发现明显收费项"}</dd></div>
@@ -98,7 +108,10 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
           <span className="section-kicker">计价与结算</span>
           <h2>报名前就看清金额条件</h2>
           <dl className="evidence-list">
-            <div><dt>计价方式</dt><dd>{formatPay(job)}</dd></div>
+            <div><dt>计价类型</dt><dd>{job.payType === "daily" ? "日薪" : "时薪"}</dd></div>
+            {job.payType === "hourly" ? <div><dt>基础时薪</dt><dd>{formatCurrency(job.baseRateCents ?? 0)}/小时</dd></div> : null}
+            {job.payType === "hourly" && job.nightBonusCents > 0 ? <div><dt>夜班补贴</dt><dd>{formatCurrency(job.nightBonusCents)}/小时（作用于全部核定分钟）</dd></div> : null}
+            <div><dt>{job.payType === "daily" ? "固定日薪" : "有效时薪"}</dt><dd>{formatPay(job)}{job.payType === "daily" ? "，不折算时薪" : ""}</dd></div>
             <div><dt>预计收入</dt><dd>{formatCurrency(job.estimatedAmountCents)}</dd></div>
             <div><dt>结算时间</dt><dd>{job.settlementTiming}</dd></div>
             <div><dt>结算前提</dt><dd>{job.settlementConditions}</dd></div>
@@ -109,14 +122,14 @@ export function StudentJobDetailPage({ refreshKey }: { refreshKey: number }) {
 
       <aside className="sticky-action-card" aria-label="岗位报名操作">
         <div>
-          <strong>{job.hasApplied ? "你已报名该岗位" : "信息已确认，准备报名？"}</strong>
-          <p>{job.hasApplied ? "前往我的报名查看当前云端状态。" : `${data.profile.displayName} · ${formatShift(data.profile.availableStart, data.profile.availableEnd)}`}</p>
+          <strong>{job.hasApplied ? "你已报名该岗位" : unavailableReason ?? "信息已确认，准备报名？"}</strong>
+          <p>{job.hasApplied ? "前往我的报名查看当前云端状态。" : unavailableReason ?? `${data.profile.displayName} · ${formatShift(data.profile.availableStart, data.profile.availableEnd)}`}</p>
         </div>
         {job.hasApplied ? (
           <Link className="primary-button" to="/student/applications">查看我的报名</Link>
         ) : (
           <button className="primary-button" type="button" disabled={!canApply} onClick={() => setShowConfirmation(true)}>
-            {canApply ? "立即报名" : "当前不可报名"}
+            {canApply ? "立即报名" : unavailableReason ?? "当前不可报名"}
           </button>
         )}
       </aside>

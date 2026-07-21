@@ -53,6 +53,22 @@ export function approveApplication(applicationId: string): Promise<ApplicationMu
   );
 }
 
+export function finishApplication(applicationId: string, actualMinutes: number): Promise<ApplicationMutationResult> {
+  return execute(
+    () => repository.completeApplication(applicationId, actualMinutes),
+    (value) => mapMutationResult(value, "already_completed"),
+    "完工核定失败，请核对实际分钟后重试",
+  );
+}
+
+export function confirmDemoSettlement(applicationId: string): Promise<ApplicationMutationResult> {
+  return execute(
+    () => repository.settleDemo(applicationId),
+    (value) => mapMutationResult(value, "already_settled"),
+    "Demo模拟结算失败，请稍后重试",
+  );
+}
+
 export async function resetCurrentDemo(): Promise<void> {
   await execute(repository.resetSession, mapResetResult, "Demo重置失败，请稍后重试");
 }

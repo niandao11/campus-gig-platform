@@ -33,6 +33,13 @@ export function calculateAmountCents(
   return Math.round(((baseRateCents + nightBonusCents) * minutes) / 60);
 }
 
+export function isValidActualMinutes(minutes: number, scheduledMinutes: number): boolean {
+  return Number.isInteger(minutes)
+    && Number.isInteger(scheduledMinutes)
+    && minutes >= 1
+    && minutes <= scheduledMinutes;
+}
+
 export function haversineDistanceKm(
   from: { latitude: number; longitude: number },
   to: { latitude: number; longitude: number },

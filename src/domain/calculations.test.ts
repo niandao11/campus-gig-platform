@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { calculateAmountCents, haversineDistanceKm } from "./calculations";
+import { calculateAmountCents, haversineDistanceKm, isValidActualMinutes } from "./calculations";
 
 describe("calculateAmountCents", () => {
   it("按分钟四舍五入计算时薪", () => {
     expect(calculateAmountCents("hourly", 61, 1200, 0, null)).toBe(1220);
+  });
+
+  it("J-01核定270分钟为5400分", () => {
+    expect(calculateAmountCents("hourly", 270, 1200, 0, null)).toBe(5400);
   });
 
   it("将夜班补贴用于全部分钟", () => {
@@ -16,6 +20,19 @@ describe("calculateAmountCents", () => {
 
   it("拒绝无效工时", () => {
     expect(() => calculateAmountCents("hourly", 0, 1200, 0, null)).toThrow();
+    expect(() => calculateAmountCents("hourly", -1, 1200, 0, null)).toThrow();
+    expect(() => calculateAmountCents("hourly", 1.5, 1200, 0, null)).toThrow();
+  });
+});
+
+describe("isValidActualMinutes", () => {
+  it("只接受1到计划分钟之间的整数", () => {
+    expect(isValidActualMinutes(1, 300)).toBe(true);
+    expect(isValidActualMinutes(300, 300)).toBe(true);
+    expect(isValidActualMinutes(0, 300)).toBe(false);
+    expect(isValidActualMinutes(-1, 300)).toBe(false);
+    expect(isValidActualMinutes(1.5, 300)).toBe(false);
+    expect(isValidActualMinutes(301, 300)).toBe(false);
   });
 });
 

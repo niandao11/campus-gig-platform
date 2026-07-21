@@ -138,6 +138,49 @@ describe("Supabase RPC 输出映射", () => {
     expect(mapMutationResult({ application: { ...application, status: "confirmed" }, already_applied: true }, "already_applied").repeated).toBe(true);
   });
 
+  it("映射完工、待结算金额与严格事件顺序", () => {
+    const completedEvent = {
+      ...event,
+      id: "event-3",
+      from_status: "confirmed",
+      to_status: "completed",
+      actor: "employer",
+      note: "招聘方核定完工：270分钟",
+      created_at: "2026-07-25T11:00:00Z",
+    };
+    const pendingSettlementEvent = {
+      ...event,
+      id: "event-4",
+      from_status: "completed",
+      to_status: "pending_settlement",
+      actor: "system",
+      note: "系统自动生成待模拟结算记录",
+      created_at: "2026-07-25T11:00:00.001Z",
+    };
+    const result = mapApplicationsView({
+      applications: [{
+        ...application,
+        status: "pending_settlement",
+        actual_minutes: 270,
+        final_amount_cents: 5400,
+        events: [event, { ...event, id: "event-2", from_status: "pending", to_status: "confirmed", actor: "employer" }, completedEvent, pendingSettlementEvent],
+        settlement: { amount_cents: 5400, status: "pending", created_at: "2026-07-25T11:00:00Z", settled_at: null },
+      }],
+    });
+    expect(result.applications[0]).toMatchObject({
+      status: "pending_settlement",
+      actualMinutes: 270,
+      finalAmountCents: 5400,
+      settlement: { amountCents: 5400, status: "pending", settledAt: null },
+    });
+    expect(result.applications[0].events.map((item) => item.toStatus)).toEqual(["pending", "confirmed", "completed", "pending_settlement"]);
+  });
+
+  it("映射完工与结算RPC各自的幂等标记", () => {
+    expect(mapMutationResult({ application: { ...application, status: "pending_settlement" }, already_completed: true }, "already_completed").repeated).toBe(true);
+    expect(mapMutationResult({ application: { ...application, status: "settled_demo" }, already_settled: false }, "already_settled").repeated).toBe(false);
+  });
+
   it("拒绝未知状态，避免前端伪造可见成功", () => {
     expect(() => mapApplicationsView({ applications: [{ ...application, status: "unexpected" }] })).toThrow("报名状态无效");
   });

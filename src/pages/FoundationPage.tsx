@@ -10,7 +10,7 @@ interface FoundationPageProps {
 const statusContent = {
   loading: { title: "正在连接云端", detail: "正在建立匿名演示会话并初始化数据。", label: "连接中", tone: "warning" },
   ready: { title: "工程骨架与云端已连接", detail: "匿名会话和 Supabase 初始化 RPC 已成功。", label: "云端已连接", tone: "success" },
-  unconfigured: { title: "工程骨架已就绪", detail: "本地尚未配置 Supabase 环境变量，当前只展示 G3 工程壳。", label: "等待环境变量", tone: "warning" },
+  unconfigured: { title: "应用等待云端配置", detail: "当前环境尚未配置 Supabase 客户端变量，无法读取真实演示状态。", label: "等待环境变量", tone: "warning" },
   error: { title: "云端连接失败", detail: "真实状态未被覆盖，请检查网络或云端配置后重试。", label: "连接失败", tone: "danger" },
 } as const;
 
@@ -43,12 +43,12 @@ export function FoundationPage({ eyebrow, title, description, sessionState, sess
         <article>
           <span>02</span>
           <h3>两个角色</h3>
-          <p>学生与快递驿站在同一链接切换；G4 将接入同一匿名会话的真实云端状态。</p>
+          <p>学生与快递驿站在同一链接切换，并读写同一匿名会话的云端状态。</p>
         </article>
         <article>
           <span>03</span>
           <h3>完整闭环</h3>
-          <p>报名、确认、完工、待结算与 Demo 模拟结算将在 G4–G5 接入。</p>
+          <p>报名、确认、完工、待模拟结算与已结算（Demo模拟）形成完整状态闭环。</p>
         </article>
       </div>
     </section>

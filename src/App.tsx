@@ -5,9 +5,10 @@ import { isSupabaseConfigured } from "./lib/supabase";
 import { EmployerApplicationDetailPage } from "./pages/EmployerApplicationDetailPage";
 import { EmployerApplicationsPage } from "./pages/EmployerApplicationsPage";
 import { EmployerDashboardPage } from "./pages/EmployerDashboardPage";
+import { EmployerSettlementsPage } from "./pages/EmployerSettlementsPage";
 import { FoundationPage } from "./pages/FoundationPage";
-import { StagePlaceholderPage } from "./pages/StagePlaceholderPage";
 import { StudentApplicationsPage } from "./pages/StudentApplicationsPage";
+import { StudentComparePage } from "./pages/StudentComparePage";
 import { StudentJobDetailPage } from "./pages/StudentJobDetailPage";
 import { StudentJobsPage } from "./pages/StudentJobsPage";
 import { resetCurrentDemo } from "./services/demoService";
@@ -72,18 +73,12 @@ export default function App() {
         <Route path="/" element={<Navigate replace to="/student/jobs" />} />
         <Route path="/student/jobs" element={guard(<StudentJobsPage refreshKey={refreshKey} />)} />
         <Route path="/student/jobs/:jobId" element={guard(<StudentJobDetailPage refreshKey={refreshKey} />)} />
-        <Route
-          path="/student/compare"
-          element={guard(<StagePlaceholderPage role="student" eyebrow="学生端 · 岗位比较" title="完整比较将在 G5 开放" detail="当前阶段先把一条 J-01 岗位的报名与确认闭环做透。" />)}
-        />
+        <Route path="/student/compare" element={guard(<StudentComparePage refreshKey={refreshKey} />)} />
         <Route path="/student/applications" element={guard(<StudentApplicationsPage refreshKey={refreshKey} />)} />
         <Route path="/employer/dashboard" element={guard(<EmployerDashboardPage refreshKey={refreshKey} />)} />
         <Route path="/employer/applications" element={guard(<EmployerApplicationsPage refreshKey={refreshKey} />)} />
         <Route path="/employer/applications/:applicationId" element={guard(<EmployerApplicationDetailPage refreshKey={refreshKey} />)} />
-        <Route
-          path="/employer/settlements"
-          element={guard(<StagePlaceholderPage role="employer" eyebrow="招聘方端 · 模拟结算" title="完工与模拟结算将在 G5 开放" detail="G4 不提供跨级按钮，也不会用静态状态伪造结算能力。" />)}
-        />
+        <Route path="/employer/settlements" element={guard(<EmployerSettlementsPage refreshKey={refreshKey} />)} />
         <Route path="*" element={<Navigate replace to={role === "student" ? "/student/jobs" : "/employer/dashboard"} />} />
       </Routes>
     </AppShell>

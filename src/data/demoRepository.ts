@@ -70,6 +70,17 @@ export function confirmApplication(applicationId: string): Promise<unknown> {
   });
 }
 
+export function completeApplication(applicationId: string, actualMinutes: number): Promise<unknown> {
+  return callRpc("complete_application", {
+    p_application_id: applicationId,
+    p_actual_minutes: actualMinutes,
+  });
+}
+
+export function settleDemo(applicationId: string): Promise<unknown> {
+  return callRpc("settle_demo", { p_application_id: applicationId });
+}
+
 export function resetSession(): Promise<unknown> {
   return callRpc("reset_demo_session");
 }
