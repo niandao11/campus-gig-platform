@@ -38,6 +38,10 @@ export default function App() {
     void connectDemoSession();
   }, [connectDemoSession]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
+
   function guard(content: ReactNode): ReactNode {
     if (sessionState === "ready") return content;
     return (
