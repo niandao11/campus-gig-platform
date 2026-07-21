@@ -1,0 +1,158 @@
+{
+  "baseUrl": "https://campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app",
+  "browser": "Edg/150.0.4078.65",
+  "checks": [
+    {
+      "name": "Production中文应用壳",
+      "passed": true,
+      "detail": {
+        "title": "校园零工平台",
+        "lang": "zh-CN",
+        "path": "/student/jobs",
+        "text": "校园零工平台\nXX大学 · 演示环境\n学生端\n招聘方端\n找零工\n岗位比较\n我的报名\n演示环境 · 角色切换非生产权限 · 结算仅为Demo模拟\n重置Demo\n学生端 · 岗位发现\n周末有空，先找到一份信息透明的零工\n\n同一所校园、同一招聘方的五条合成演示班次，覆盖真实校园零工形态；筛选、比较、报名与后续结算都读取当前会话的云端数据。\n\n当前学生\n陈同学（演示）\n可工作时间\n7月25日周六 14:00–19:00\n目标范围\n校园附近 5 公里 · 时薪优先\n决策条件\n筛选岗位\n清除筛选\n日期 / 时段\n全部时段\n匹配我的空闲时间\n周六\n周日\n计价方式\n全部计价\n时薪\n日薪\n结算时间\n全部结算\n当日\n次日\n仅看 5 公里内\nXX大学 · 校园快递驿站直招\n可比较的班次\n筛选结果 5 / 5 条\n报名开放\nJ-01 · 合成直招演示岗位\n匹配空闲时间\n入库分拣\n\nXX大学校园快递驿站\n\n¥12/小时\n班次\n7月25日周六 14:00–19:00\n直线距离\n0.3 公里\n预计收入\n¥60\n剩余名额\n5/5 人\n核定工时后当日21:00前模拟结算\n\n招聘方确认到岗与实际工时后生成待模拟结算记录。"
+      }
+    },
+    {
+      "name": "根路由与直接子路由",
+      "passed": true,
+      "detail": [
+        {
+          "route": "/",
+          "path": "/student/jobs",
+          "hasNotFound": false
+        },
+        {
+          "route": "/student/jobs",
+          "path": "/student/jobs",
+          "hasNotFound": false
+        },
+        {
+          "route": "/student/compare",
+          "path": "/student/compare",
+          "hasNotFound": false
+        },
+        {
+          "route": "/student/applications",
+          "path": "/student/applications",
+          "hasNotFound": false
+        },
+        {
+          "route": "/employer/dashboard",
+          "path": "/employer/dashboard",
+          "hasNotFound": false
+        },
+        {
+          "route": "/employer/applications",
+          "path": "/employer/applications",
+          "hasNotFound": false
+        },
+        {
+          "route": "/employer/settlements",
+          "path": "/employer/settlements",
+          "hasNotFound": false
+        }
+      ]
+    },
+    {
+      "name": "学生报名",
+      "passed": true,
+      "detail": "pending, one event"
+    },
+    {
+      "name": "招聘方确认",
+      "passed": true,
+      "detail": "confirmed, two events"
+    },
+    {
+      "name": "完工与数据库计价",
+      "passed": true,
+      "detail": "270 minutes, ¥54, four events"
+    },
+    {
+      "name": "唯一模拟结算",
+      "passed": true,
+      "detail": "settled_demo, ¥54"
+    },
+    {
+      "name": "学生五事件回读",
+      "passed": true,
+      "detail": {
+        "eventCount": 5,
+        "hasAmount": true,
+        "hasMinutes": true,
+        "hasDemo": true
+      }
+    },
+    {
+      "name": "终态刷新保持",
+      "passed": true,
+      "detail": "state and events survived hard reload"
+    },
+    {
+      "name": "终态重置",
+      "passed": true,
+      "detail": {
+        "initialJ01Href": "/student/jobs/5109f106-e27a-4ae1-8e35-110a2e0bc35b",
+        "resetState": {
+          "href": "/student/jobs/2f6dcf59-cf53-484d-8404-f7c82052df50",
+          "hasBaselineSlots": true,
+          "hasAppliedCopy": false
+        }
+      }
+    },
+    {
+      "name": "Production桌面无横向溢出",
+      "passed": true,
+      "detail": {
+        "clientWidth": 1425,
+        "scrollWidth": 1425
+      }
+    },
+    {
+      "name": "控制台无应用错误",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "docs/evidence/g7/screenshots/01-production-jobs-390.png",
+      "sha256": "b003b04326fd2a788221ce31548020ef7e39b64127e79a89a00924cb4049494a",
+      "bytes": 51032
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/02-production-pending-390.png",
+      "sha256": "cda26e3fc60957e417ed1abec3fa0fb0463ec2875ec5b6ab1bfe4fffde6ddcbf",
+      "bytes": 56999
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/03-production-confirmed-390.png",
+      "sha256": "8aa4780dfa9c59aab419a902a25c80b2758fc2e9b01d0a5b69c3f09200fb6a72",
+      "bytes": 51967
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/04-production-pending-settlement-390.png",
+      "sha256": "6c0d4050e8dc7a3bb3f563f4a72723905c4f406c0d5abc6134398ffcf80dc50b",
+      "bytes": 52371
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/05-production-settled-employer-390.png",
+      "sha256": "e8de20617a0e7ccbaa2bd3a71ef6e41c0d7359ffffa1f56b127ef4f4b0e9cfd8",
+      "bytes": 58919
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/06-production-settled-student-390.png",
+      "sha256": "b64f29770efea143c559e4acfc9085c48821e6d34a0e4d9435fd479f35351b27",
+      "bytes": 52927
+    },
+    {
+      "file": "docs/evidence/g7/screenshots/07-production-reset-1440.png",
+      "sha256": "c2149e4421b9b2fa082ccb95bfe206c79d97b968ebe8d4bb7f9350c746efe8e4",
+      "bytes": 104546
+    }
+  ],
+  "consoleIssues": [],
+  "startedAt": "2026-07-21T14:21:04.493Z",
+  "completedAt": "2026-07-21T14:21:36.107Z",
+  "passed": true
+}

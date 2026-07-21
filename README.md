@@ -6,7 +6,8 @@
 
 ## 在线体验
 
-- Production：[campus-gig-platform.vercel.app](https://campus-gig-platform.vercel.app)
+- 已验证发布部署：[campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app](https://campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app)
+- 计划短域名：`campus-gig-platform.vercel.app`；完成 Vercel Production Alias 切换前不要使用该短域名
 - 默认入口：学生端“找零工”
 - 建议开始前点击右上角“重置 Demo”，恢复当前浏览器的独立演示基线
 - 完整三分钟操作说明：[docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)
@@ -29,7 +30,7 @@
 3. 切换“招聘方端”→“报名处理”，进入 J-01 报名并点击“确认报名”。
 4. 在同一报名中录入 `270` 分钟，点击“确认完工并生成待结算”。
 5. 进入“模拟结算”，点击“确认 Demo 模拟结算”。
-6. 切回学生端“我的报名”，核对 ¥54.00 和五段事件时间线。
+6. 切回学生端“我的报名”，核对 ¥54 和五段事件时间线。
 
 状态顺序固定为：
 
@@ -106,6 +107,7 @@ Vercel 使用 Vite、`npm run build`、输出目录 `dist`、根目录 `./`；`v
 - [G4 双端报名确认](docs/evidence/G4_VERIFICATION.md)
 - [G5 完整生命周期](docs/evidence/G5_VERIFICATION.md)
 - [G6 异常与响应式质量](docs/evidence/G6_VERIFICATION.md)
+- [G7 Production UAT](docs/evidence/G7_VERIFICATION.md)
 
 ## 明确未实现
 
