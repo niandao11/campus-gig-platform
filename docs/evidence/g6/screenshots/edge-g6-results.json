@@ -1,0 +1,114 @@
+{
+  "baseUrl": "https://campus-gig-platform-ioytlibe3-campus-gig-platform.vercel.app",
+  "browser": "Edg/150.0.4078.65",
+  "screenshots": [
+    {
+      "file": "docs/evidence/g6/screenshots/01-jobs-390.png",
+      "sha256": "df4ff436307c3d4837594fbd8acb780a44c2d150e0ef0affc768b01b300053a1",
+      "bytes": 61837
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/02-cancel-pending-390.png",
+      "sha256": "72bbf616917b765b93acc13e5f499949738f6a54284a3bfd5e868119e50ab302",
+      "bytes": 71042
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/03-cancel-network-error-390.png",
+      "sha256": "31cf0b4851d51f0c4b5b37714011618b5c7998d59dbd49e0afe70e5937ab045b",
+      "bytes": 68554
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/04-cancelled-390.png",
+      "sha256": "850b0907271f0e830bac436e2777777525e51e3c0b229d2544668a85b852e9cd",
+      "bytes": 59513
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/05-reject-empty-390.png",
+      "sha256": "6e1083775d88687566cca57a686eda2c2ecd3273cd97b848481b3c508c215b18",
+      "bytes": 46622
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/06-rejected-employer-390.png",
+      "sha256": "a6799e9eea06cff8148d5850bbb1e5be049748ed3466d2d9ba14608ad71796a6",
+      "bytes": 52390
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/07-rejected-student-390.png",
+      "sha256": "09b597859b650482eff08c3a06006c76b107c13643678e80347472d9cc991905",
+      "bytes": 53338
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/08-refresh-network-error-390.png",
+      "sha256": "8aaa053b66774c6f539a7fa1d61a8aa60a1c01b0195b88dfc7304b47ba794bb1",
+      "bytes": 59185
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/09-bootstrap-network-error-390.png",
+      "sha256": "0fa53b7dc01b2feb0e6654f0c3f8d6f0eb6448667ca145220f161afa2b8628d9",
+      "bytes": 63823
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/10-jobs-375.png",
+      "sha256": "a48c88910133fdfb880abc666be6ce744f07a1fdaf36d3527cff6eae2ed2646f",
+      "bytes": 50424
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/11-jobs-768.png",
+      "sha256": "edd1ea2a088d0fa2782e1b7e072048685d2944c8ed695ca2438f2338c4db2065",
+      "bytes": 70545
+    },
+    {
+      "file": "docs/evidence/g6/screenshots/12-jobs-1440.png",
+      "sha256": "c3e23a66e3510a5d5cad3e104b92ae1f9e85dafee956b8a8baefaa6ad02db3d1",
+      "bytes": 103895
+    }
+  ],
+  "checks": [
+    {
+      "name": "Edge岗位首页",
+      "passed": true,
+      "detail": "J-01 first path visible"
+    },
+    {
+      "name": "取消失败不伪造成功",
+      "passed": true,
+      "detail": "pending preserved while Supabase is blocked"
+    },
+    {
+      "name": "拒绝原因必填",
+      "passed": true,
+      "detail": "empty rejection submit disabled"
+    },
+    {
+      "name": "刷新失败保留真实数据",
+      "passed": true,
+      "detail": "rejected record and reason remain visible"
+    },
+    {
+      "name": "网络恢复重试",
+      "passed": true,
+      "detail": "five jobs restored after unblocking Supabase"
+    },
+    {
+      "name": "四视口无横向溢出",
+      "passed": true,
+      "detail": {
+        "metrics375": {
+          "clientWidth": 360,
+          "scrollWidth": 360
+        },
+        "metrics768": {
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        "metrics1440": {
+          "clientWidth": 1425,
+          "scrollWidth": 1425
+        }
+      }
+    }
+  ],
+  "startedAt": "2026-07-21T13:16:23.312Z",
+  "completedAt": "2026-07-21T13:16:40.548Z",
+  "passed": true
+}
