@@ -238,3 +238,20 @@ G2 为 migration-ready 契约审查，尚未实际创建 Supabase 表、策略�
 - 技术架构负责人：无条件同意；
 - 交付与质量负责人：无条件同意；
 - 最终结论：G4 已完成。依据 D-020 不合并 `main`，G3 外部托管可达性风险继续保留到 G7。
+
+## G5：完整业务生命周期
+
+- 最终实现提交：`d6298681eef35809d310a6232b488d80ecb1d3a0`；
+- 五岗位、筛选、最多三条比较、招聘方完工、数据库计价、唯一模拟结算和学生五事件回读全部通过；
+- 时薪、夜班、日薪、分钟舍入、名额、幂等和非法跨级均按冻结契约验证；
+- 详细命令、Preview、浏览器 UAT 与三方票决：[G5_VERIFICATION.md](evidence/G5_VERIFICATION.md)；
+- 产品、技术、质量三方均无条件同意，G5 已完成；依据 D-020 不合并 `main`。
+
+## G6：异常、响应式与视觉质量
+
+- 最终应用提交：`c4de0aeef402a46f3d503c4032ae13279aa354e8`；最终 Edge 证据提交：`7716298`；
+- 学生 pending 取消、招聘方 pending 拒绝及原因回读、终态只读、网络失败保留真实状态和恢复重试全部通过；
+- Microsoft Edge `150.0.4078.65` 对真实 Preview 完成请求阻断、恢复、四视口和 12 张截图验收，结构化结果 `passed=true`；
+- TypeScript、ESLint、5 文件 27 项 Vitest、100 modules production build、冻结哈希、旧模板和密钥扫描全部通过；
+- 详细命令、Preview、截图哈希与票决：[G6_VERIFICATION.md](evidence/G6_VERIFICATION.md)；
+- 产品、技术、质量三方均无条件同意，G6 已完成；D-020 继续留在 G7，当前不合并 `main`。
