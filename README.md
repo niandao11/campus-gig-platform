@@ -6,8 +6,8 @@
 
 ## 在线体验
 
-- 已验证发布部署：[campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app](https://campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app)
-- 计划短域名：`campus-gig-platform.vercel.app`；完成 Vercel Production Alias 切换前不要使用该短域名
+- Production：[campus-gig-platform-nine.vercel.app](https://campus-gig-platform-nine.vercel.app)
+- 请勿使用旧的 `campus-gig-platform.vercel.app`；该域名属于遗留英文项目，不是当前项目的 Production 域名
 - 默认入口：学生端“找零工”
 - 建议开始前点击右上角“重置 Demo”，恢复当前浏览器的独立演示基线
 - 完整三分钟操作说明：[docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)

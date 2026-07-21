@@ -1,6 +1,6 @@
 # 三分钟演示脚本
 
-适用链接：[已验证发布部署](https://campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app)
+适用链接：[campus-gig-platform-nine.vercel.app](https://campus-gig-platform-nine.vercel.app)
 
 ## 开始前
 

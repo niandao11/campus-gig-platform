@@ -2,11 +2,12 @@
 
 - 执行日期：2026-07-21（北京时间）
 - 发布分支：`main`
-- 应用发布提交：`c0b6a21bff083768066f436038c17fedf966b861`
-- UAT 执行时 GitHub `main`：已核对为同一 SHA；后续证据文档提交不改变应用运行代码
+- 当前 Production 源提交：`34d7851879e5abc1c71b5a9d4f88353798ad9925`
+- 完整生命周期 UAT 的应用等价提交：`c0b6a21bff083768066f436038c17fedf966b861`；`34d7851` 只新增 G7 脚本、截图与文档，部署后的 HTML/JS/CSS 与该 UAT 版本一致
 - Vercel GitHub Deployment：`Production`，构建状态 `success`
-- 已验证部署：[campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app](https://campus-gig-platform-dsuy15830-campus-gig-platform.vercel.app)
-- 正式短域名状态：`campus-gig-platform.vercel.app` 仍指向旧英文模板，尚未完成 Production Alias 切换，不得作为交付链接
+- 当前项目正式 Production 域名：[campus-gig-platform-nine.vercel.app](https://campus-gig-platform-nine.vercel.app)
+- Vercel Deployment Details：`Ready Latest`、`Environment = Production`，因此 `Promote` 按钮置灰属于已发布状态
+- 遗留同名域名：`campus-gig-platform.vercel.app` 指向另一个旧英文项目/部署，不是当前项目的 Production 域名，不得作为交付链接
 - 网络条件：Edge UAT 使用当前可访问 Vercel/Supabase 的系统代理路径；不作为中国大陆无 VPN 通过证据
 
 ## 发布前自动门禁
@@ -57,13 +58,13 @@
 
 ## 尚未关闭的 G7 闸门
 
-### 1. Production Alias
+### 1. Production 域名（已通过）
 
-Vercel 已为 `main@c0b6a21` 完成新部署，但正式短域名仍返回旧英文 CampusGig 页面，全部业务子路由仍为 404。需要在 Vercel 将最终部署 Promote to Production 或将 `campus-gig-platform.vercel.app` 分配给最终部署，然后重新扫描旧文案与 PII。
+Vercel 已将 `campus-gig-platform-nine.vercel.app` 自动分配给当前项目最新 Production。根路由、`/student/jobs`、`/student/compare`、`/student/applications`、`/employer/dashboard`、`/employer/applications`、`/employer/settlements` 均返回 HTTP 200、标题“校园零工平台”；HTML 中旧 CampusGig/YUVASREE/Python Scraper 等关键词零命中。
 
 ### 2. 旧部署历史
 
-旧短域名当前仍公开旧姓名、注册号和邮箱等 PII 候选。新生产版本验收后，按既定计划必须经用户确认再删除或停用旧 Vercel 部署历史；Codex 不自行执行不可逆删除。
+遗留的 `campus-gig-platform.vercel.app` 当前仍公开旧姓名、注册号和邮箱等 PII 候选。它不属于截图所示当前 Production 域名。按既定计划必须经用户确认后再删除、停用或保护对应旧 Vercel 项目/部署；Codex 不自行执行不可逆删除。
 
 ### 3. 中国大陆无 VPN 实网
 
@@ -86,7 +87,7 @@ Production 最终稳定后，按 D-018 在 Vercel 重新开启 Preview `Require 
 
 ## 三方票决
 
-- 产品负责人：待 Production Alias、实网与最终交付材料复核
+- 产品负责人：待实网、遗留项目与最终交付材料复核
 - 技术负责人：待最终 `main` / Vercel SHA、Production 域名与环境复核
 - 质量负责人：待全部 G7 闸门关闭或按批准风险边界处置
 - 阶段状态：进行中，不得标记 G7 完成。
