@@ -1,4 +1,6 @@
-import { supabase } from "../lib/supabase";
+import * as repository from "../data/demoRepository";
+import { isSupabaseConfigured } from "../lib/supabase";
+import { mapJobsView } from "./demoMappers";
 
 export interface SessionBootstrapResult {
   configured: boolean;
@@ -7,40 +9,21 @@ export interface SessionBootstrapResult {
 }
 
 export async function bootstrapDemoSession(): Promise<SessionBootstrapResult> {
-  if (!supabase) {
+  if (!isSupabaseConfigured) {
     return { configured: false, ready: false, error: null };
   }
 
-  const existing = await supabase.auth.getSession();
-  if (existing.error) {
-    return { configured: true, ready: false, error: "读取匿名演示会话失败，请重试。" };
-  }
-
-  if (!existing.data.session) {
-    const signIn = await supabase.auth.signInAnonymously();
-    if (signIn.error) {
-      return { configured: true, ready: false, error: "匿名演示身份建立失败，请确认云端已开启匿名登录。" };
+  try {
+    const existing = await repository.readAuthSession();
+    if (!existing) await repository.createAnonymousSession();
+    await repository.initializeSession();
+    const jobs = mapJobsView(await repository.readJobs());
+    if (jobs.campus.name !== "XX大学" || jobs.jobs.length !== 5) {
+      return { configured: true, ready: false, error: "云端岗位基线不完整，应返回5条演示班次" };
     }
-  }
-
-  const initialization = await supabase.rpc("initialize_demo_session");
-  if (initialization.error) {
-    return { configured: true, ready: false, error: "演示数据初始化失败，请检查云端数据库配置。" };
-  }
-
-  const initialized = initialization.data as { session?: { id?: unknown }; campus?: { name?: unknown } } | null;
-  if (typeof initialized?.session?.id !== "string" || initialized.campus?.name !== "XX大学") {
-    return { configured: true, ready: false, error: "云端会话返回结构不完整" };
-  }
-
-  const jobsResult = await supabase.rpc("get_current_demo_jobs");
-  if (jobsResult.error) {
-    return { configured: true, ready: false, error: "演示岗位读取失败，请稍后重试。" };
-  }
-
-  const jobsPayload = jobsResult.data as { jobs?: unknown[] } | null;
-  if (!Array.isArray(jobsPayload?.jobs) || jobsPayload.jobs.length !== 5) {
-    return { configured: true, ready: false, error: "云端岗位基线不完整，应返回5条演示班次" };
+  } catch (error) {
+    const detail = error instanceof repository.DemoRepositoryError ? error.causeMessage : null;
+    return { configured: true, ready: false, error: detail || "云端连接失败，请稍后重试。" };
   }
 
   return { configured: true, ready: true, error: null };

@@ -1,9 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AppShell } from "./components/AppShell";
 import { isSupabaseConfigured } from "./lib/supabase";
+import { EmployerApplicationDetailPage } from "./pages/EmployerApplicationDetailPage";
+import { EmployerApplicationsPage } from "./pages/EmployerApplicationsPage";
+import { EmployerDashboardPage } from "./pages/EmployerDashboardPage";
 import { FoundationPage } from "./pages/FoundationPage";
+import { StagePlaceholderPage } from "./pages/StagePlaceholderPage";
+import { StudentApplicationsPage } from "./pages/StudentApplicationsPage";
+import { StudentJobDetailPage } from "./pages/StudentJobDetailPage";
+import { StudentJobsPage } from "./pages/StudentJobsPage";
+import { resetCurrentDemo } from "./services/demoService";
 import { bootstrapDemoSession } from "./services/sessionService";
+
 type SessionState = "loading" | "ready" | "unconfigured" | "error";
 
 export default function App() {
@@ -11,6 +20,7 @@ export default function App() {
   const role = location.pathname.startsWith("/employer") ? "employer" : "student";
   const [sessionState, setSessionState] = useState<SessionState>(isSupabaseConfigured ? "loading" : "unconfigured");
   const [sessionError, setSessionError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const connectDemoSession = useCallback(async () => {
     setSessionState(isSupabaseConfigured ? "loading" : "unconfigured");
@@ -25,43 +35,51 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    bootstrapDemoSession().then((result) => {
-      if (cancelled) return;
-      if (!result.configured) setSessionState("unconfigured");
-      else if (result.ready) setSessionState("ready");
-      else {
-        setSessionError(result.error ?? "云端连接失败，请稍后重试。");
-        setSessionState("error");
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    void connectDemoSession();
+  }, [connectDemoSession]);
+
+  function guard(content: ReactNode): ReactNode {
+    if (sessionState === "ready") return content;
+    return (
+      <FoundationPage
+        eyebrow="校园零工平台 · 云端会话"
+        title="先建立当前浏览器的匿名演示会话"
+        description="会话建立后，学生端与招聘方端将读写同一份隔离的 Supabase 数据。"
+        sessionState={sessionState}
+        sessionError={sessionError}
+        onRetry={connectDemoSession}
+      />
+    );
+  }
+
+  async function handleReset() {
+    await resetCurrentDemo();
+    setRefreshKey((current) => current + 1);
+  }
 
   return (
-    <AppShell role={role} sessionState={sessionState}>
+    <AppShell
+      role={role}
+      sessionState={sessionState}
+      onRoleSwitch={() => setRefreshKey((current) => current + 1)}
+      onReset={handleReset}
+    >
       <Routes>
         <Route path="/" element={<Navigate replace to="/student/jobs" />} />
+        <Route path="/student/jobs" element={guard(<StudentJobsPage refreshKey={refreshKey} />)} />
+        <Route path="/student/jobs/:jobId" element={guard(<StudentJobDetailPage refreshKey={refreshKey} />)} />
         <Route
-          path="/student/jobs"
-          element={
-            <FoundationPage
-              eyebrow="学生端 · 岗位发现"
-              title="把周末空闲，变成一份透明的校园零工"
-              description="基于时间、距离、计价和结算规则，选择 XX大学校园快递驿站的合成演示班次。"
-              sessionState={sessionState}
-              sessionError={sessionError}
-              onRetry={connectDemoSession}
-            />
-          }
+          path="/student/compare"
+          element={guard(<StagePlaceholderPage role="student" eyebrow="学生端 · 岗位比较" title="完整比较将在 G5 开放" detail="当前阶段先把一条 J-01 岗位的报名与确认闭环做透。" />)}
         />
-        <Route path="/student/compare" element={<FoundationPage eyebrow="学生端 · 岗位比较" title="关键条件，一屏比较" description="比较班次、有效时薪、预计收入和结算约定。" sessionState={sessionState} sessionError={sessionError} onRetry={connectDemoSession} />} />
-        <Route path="/student/applications" element={<FoundationPage eyebrow="学生端 · 我的报名" title="每一步状态，都有清晰记录" description="报名、确认、完工和模拟结算将形成可解释的时间线。" sessionState={sessionState} sessionError={sessionError} onRetry={connectDemoSession} />} />
-        <Route path="/employer/dashboard" element={<FoundationPage eyebrow="招聘方端 · 驿站工作台" title="处理报名，不让状态断在半路" description="当前招聘方为 XX大学校园快递驿站。" sessionState={sessionState} sessionError={sessionError} onRetry={connectDemoSession} />} />
-        <Route path="/employer/applications" element={<FoundationPage eyebrow="招聘方端 · 报名处理" title="确认、拒绝与完工核定" description="每个操作都遵循受控状态机并写入事件记录。" sessionState={sessionState} sessionError={sessionError} onRetry={connectDemoSession} />} />
-        <Route path="/employer/settlements" element={<FoundationPage eyebrow="招聘方端 · 模拟结算" title="结算规则透明，金额由系统计算" description="本页面仅演示结算状态，不发生真实支付。" sessionState={sessionState} sessionError={sessionError} onRetry={connectDemoSession} />} />
+        <Route path="/student/applications" element={guard(<StudentApplicationsPage refreshKey={refreshKey} />)} />
+        <Route path="/employer/dashboard" element={guard(<EmployerDashboardPage refreshKey={refreshKey} />)} />
+        <Route path="/employer/applications" element={guard(<EmployerApplicationsPage refreshKey={refreshKey} />)} />
+        <Route path="/employer/applications/:applicationId" element={guard(<EmployerApplicationDetailPage refreshKey={refreshKey} />)} />
+        <Route
+          path="/employer/settlements"
+          element={guard(<StagePlaceholderPage role="employer" eyebrow="招聘方端 · 模拟结算" title="完工与模拟结算将在 G5 开放" detail="G4 不提供跨级按钮，也不会用静态状态伪造结算能力。" />)}
+        />
         <Route path="*" element={<Navigate replace to={role === "student" ? "/student/jobs" : "/employer/dashboard"} />} />
       </Routes>
     </AppShell>
