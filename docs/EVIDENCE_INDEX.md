@@ -125,3 +125,47 @@ G2 为 migration-ready 契约审查，尚未实际创建 Supabase 表、策略�
 ## G3–G7
 
 每阶段完成后追加：commit SHA、执行环境与时间、测试命令、Preview/Production URL、关键截图、数据库检查、已知限制和三方票决。
+
+## G3：本地代码校准（云端闸门未关闭）
+
+复核时间：2026-07-21 13:02:05 +08:00。
+
+执行环境：Windows / `feat/g3-foundation` / Node.js 22（Codex bundled runtime）。
+
+代码提交：`0881711d5e3b969bf3aebf15ec2e7e4c00344cbc`（工程、前端骨架、migration）
+
+### 自动检查
+
+| 检查 | 命令/方式 | 结果 |
+|---|---|---|
+| TypeScript | `tsc -b --pretty false` | 通过 |
+| ESLint | `eslint src --ext .ts,.tsx --max-warnings 0` | 通过，0 warning |
+| Vitest | `vitest run` | 2个文件、8项测试全部通过 |
+| Production build | `vite build` | 通过，81 modules；JS gzip 112.87kB；CSS gzip 1.91kB |
+| 旧模板扫描 | 构建产物扫描 `YUVASREE`、`TechFest`、`Python Scraper` 等 | 零命中 |
+| 密钥扫描 | 仓库扫描 JWT、`service_role`、GitHub token 和非空真实环境变量 | 零命中 |
+| SQL静态检查 | 表、RLS、policy、RPC、权限、行锁、幂等和事务走查 | 9张表、9次RLS、9条策略、5条模板、10个受控RPC；未发现静态阻塞 |
+
+### 浏览器证据
+
+- 直接访问 `/employer/dashboard` 时，当前角色和导航均正确显示“招聘方端”；
+- 375×812：页面 `scrollWidth = clientWidth`，主要按钮不小于44px，三项移动导航无截断，移动Demo说明可见；
+- 1440×900：页面 `scrollWidth = clientWidth`，布局无横向溢出；
+- [375×812 截图](evidence/g3-local-375x812.jpg)；
+- [1440×900 截图](evidence/g3-local-1440x900.jpg)。
+
+### 三方本地代码票
+
+- 产品负责人：无条件同意；
+- 技术架构负责人：无条件同意；
+- 交付与质量负责人：无条件同意。
+
+### 未关闭的云端环境闸门
+
+- GitHub推送：本机没有可用写入认证；非交互推送等待后已安全中止，远端尚无 `feat/g3-foundation`；
+- Supabase：migration尚未实际执行，Anonymous Auth、RPC、RLS越权和双会话隔离尚未实测；
+- Vercel：尚未生成与本提交对应的Preview，旧英文模板尚未被替换；
+- 实网：中国大陆无VPN宽带和手机网络各3次测试尚未执行；
+- 768×1024、390×844及Edge证据尚待后续质量阶段补齐。
+
+结论：G3本地代码已通过三方校准，但G3总体未通过；不得进入G4，直至上述云端环境闸门完成并重新三方表决。
