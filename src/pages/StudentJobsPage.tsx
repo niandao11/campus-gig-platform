@@ -13,7 +13,10 @@ export function StudentJobsPage({ refreshKey }: { refreshKey: number }) {
   const [filters, setFilters] = useState<JobFilters>(defaultJobFilters);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [compareNotice, setCompareNotice] = useState<string | null>(null);
-  const visibleJobs = useMemo(() => data ? filterJobs(data, filters) : [], [data, filters]);
+  const visibleJobs = useMemo(
+    () => data ? filterJobs(data, filters).sort((left, right) => jobCode(left).localeCompare(jobCode(right))) : [],
+    [data, filters],
+  );
 
   if (loading && !data) {
     return <PageFeedback title="正在读取校园岗位" detail="正在从当前匿名会话加载五条快递驿站班次。" />;
