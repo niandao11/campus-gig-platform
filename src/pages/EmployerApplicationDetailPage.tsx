@@ -22,9 +22,10 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
   const application = data?.applications.find((item) => item.id === applicationId);
   if (!data || !application) return <PageFeedback tone="empty" title="报名不存在或已被重置" detail="请返回报名列表读取当前会话的最新记录。" />;
   const currentApplicationId = application.id;
+  const scheduledMinutes = application.scheduledMinutes;
   const parsedMinutes = Number(actualMinutesInput);
   const minutesValid = /^\d+$/.test(actualMinutesInput)
-    && isValidActualMinutes(parsedMinutes, application.scheduledMinutes);
+    && isValidActualMinutes(parsedMinutes, scheduledMinutes);
 
   async function handleApprove() {
     setSubmitting(true);
@@ -43,7 +44,7 @@ export function EmployerApplicationDetailPage({ refreshKey }: { refreshKey: numb
 
   async function handleComplete() {
     if (!minutesValid) {
-      setActionError(`请输入 1–${application.scheduledMinutes} 之间的正整数分钟。`);
+      setActionError(`请输入 1–${scheduledMinutes} 之间的正整数分钟。`);
       return;
     }
     setSubmitting(true);
